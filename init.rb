@@ -1,0 +1,1 @@
+require 'lib/cas_rest_client'
