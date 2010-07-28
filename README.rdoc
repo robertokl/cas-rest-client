@@ -1,0 +1,19 @@
+= CASRestClient
+
+A simple HTTP and REST client to interact with services using CAS authentication.
+
+
+== Usage:
+
+  require 'rubygems'    
+  require 'cas_rest_client'
+  
+  
+  client = CasRestClient.new :uri => 'https://some-cas-server.com/tickets', :domain => 'some_domain', 
+    :username => 'user', :password => 'pass', :service => "http://service.using.cas"  
+
+  client.post 'http://service.using.cas', some_xml, :content_type => :xml  
+
+
+
+ 

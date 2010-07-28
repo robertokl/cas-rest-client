@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../../init'
 
 options = {:uri => 'http://tst.srv/v1/tickets', 
-           :domain => 'locaweb',
+           :domain => 'some_domain',
            :username => 'lw_tst',
            :password => 'inicial1234'}
 
