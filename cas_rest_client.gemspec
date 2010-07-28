@@ -2,17 +2,17 @@
 
 Gem::Specification.new do |s|
   s.name = %q{cas_rest_client}
-  s.version = "2.0"
+  s.version = "1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Antonio Marques (FT-Hospedagem), Roberto Klein (Infra-Dev)"]
+  s.authors = ["Antonio Marques, Roberto Klein"]
   s.date = %q{2010-07-08}
-  s.email = ["antonio.marques@locaweb.com.br", "roberto.klein@locaweb.com.br"]
-  s.files = ["lib/cas_rest_client/cas_rest_client.rb", "lib/cas_rest_client.rb"]
-  s.homepage = %q{http://git.locaweb.com.br/checkout-service-ticket/checkout-service-ticket}
+  s.email = ["acmarques@gmail.com", "robertokl@gmail.com"]
+  s.files = ["lib/cas_rest_client.rb", "lib/init.rb"]
+  s.homepage = %q{http://github.com/robertokl/cas-rest-client}
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.6}
-  s.summary = %q{Cliente rest para serviços sob autenticação do CAS.}
+  s.summary = %q{Rest client for services using CAS authentication.}
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION

@@ -5,11 +5,11 @@ require 'rake/gempackagetask'
 require 'spec/rake/spectask'
 
 GEM = "cas_rest_client"
-GEM_VERSION = "2.0"
-SUMMARY = "Cliente rest para serviços sob autenticação do CAS."
-AUTHOR = "Antonio Marques (FT-Hospedagem), Roberto Klein (Infra-Dev)"
-EMAIL = ["antonio.marques@locaweb.com.br", "roberto.klein@locaweb.com.br"]
-HOMEPAGE = "http://git.locaweb.com.br/cas-rest-client/cas-rest-client"
+GEM_VERSION = "1.0"
+SUMMARY = "Rest client for services using CAS authentication."
+AUTHOR = "Antonio Marques, Roberto Klein"
+EMAIL = ["acmarques@gmail.com", "robertokl@gmail.com"]
+HOMEPAGE = "http://github.com/robertokl/cas-rest-client"
 
 
 spec = Gem::Specification.new do |s| 
