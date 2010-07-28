@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../../init'
+require File.dirname(__FILE__) + '/../../lib/cas_rest_client'
 
 options = {:uri => 'http://tst.srv/v1/tickets', 
            :domain => 'some_domain',

@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.authors = ["Antonio Marques, Roberto Klein"]
   s.date = %q{2010-07-08}
   s.email = ["acmarques@gmail.com", "robertokl@gmail.com"]
-  s.files = ["lib/cas_rest_client.rb", "lib/init.rb"]
+  s.files = ['lib/**/*.rb']
   s.homepage = %q{http://github.com/robertokl/cas-rest-client}
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.6}

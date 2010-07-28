@@ -39,15 +39,21 @@ class CasRestClient
 
     ticket = nil
     begin
-      ticket = RestClient.post(@tgt, :service => @cas_opts[:service] || uri).body
+      ticket = create_ticket(@tgt, :service => @cas_opts[:service] || uri)
     rescue RestClient::ResourceNotFound => e
       get_tgt
-      ticket = RestClient.post(@tgt, :service => @cas_opts[:service] || uri).body
+      ticket = create_ticket(@tgt, :service => @cas_opts[:service] || uri)
     end
     response = RestClient.send(method, "#{uri}#{uri.include?("?") ? "&" : "?"}ticket=#{ticket}", options) if params.empty?
     response = RestClient.send(method, "#{uri}#{uri.include?("?") ? "&" : "?"}ticket=#{ticket}", params, options) unless params.empty?
     @cookies = response.cookies
     response
+  end
+
+  def create_ticket(uri, params)
+    ticket = RestClient.post(uri, params)
+    ticket = ticket.body if ticket.respond_to? 'body'
+    ticket
   end
 
   def get_tgt
@@ -56,4 +62,5 @@ class CasRestClient
     opts.delete(:use_cookies)
     @tgt = RestClient.post(opts.delete(:uri), opts).headers[:location]
   end
+  
 end
