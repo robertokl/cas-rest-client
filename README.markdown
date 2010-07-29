@@ -8,18 +8,22 @@ A simple HTTP and REST client to interact with services using CAS authentication
 
 The simplest usage is to create a singleton with the credentials for your application and use it every time you need to interact with the cas-protected application.
 
->require 'rubygems'
-require 'cas_rest_client'  
-client = CasRestClient.new :uri => 'https://some-cas-server.com/tickets', :username => 'user', password => 'pass'
-client.post 'http://service.using.cas', some_xml, :content_type => :xml  
+>require 'rubygems'  
+require 'cas_rest_client'    
+
+>client = CasRestClient.new :uri => 'https://some-cas-server.com/tickets', :username => 'user', password => 'pass'  
+
+>client.post 'http://service.using.cas', some_xml, :content_type => :xml  
 
 ### Custom parameters for cas
 You can pass to cas ticket granting ticket url any custom parameters by adding them to the instantiation hash (the domain parameter on the example):
 
->require 'rubygems'
-require 'cas_rest_client'  
-client = CasRestClient.new :uri => 'https://some-cas-server.com/tickets', :username => 'user', password => 'pass', :domain => "myDomain"
-client.post 'http://service.using.cas', some_xml, :content_type => :xml 
+>require 'rubygems'  
+require 'cas_rest_client'
+  
+>client = CasRestClient.new :uri => 'https://some-cas-server.com/tickets', :username => 'user', password => 'pass', :domain => "myDomain"
+
+>client.post 'http://service.using.cas', some_xml, :content_type => :xml 
 
 ### Custom parameters for the cas-protected application
 
