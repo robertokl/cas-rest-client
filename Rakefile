@@ -5,7 +5,7 @@ require 'rake/gempackagetask'
 require 'spec/rake/spectask'
 
 GEM = "cas_rest_client"
-GEM_VERSION = "1.0"
+GEM_VERSION = "1.1"
 SUMMARY = "Rest client for services using CAS authentication."
 AUTHOR = "Antonio Marques, Roberto Klein"
 EMAIL = ["acmarques@gmail.com", "robertokl@gmail.com"]
