@@ -6,7 +6,11 @@ class CasRestClient
 
   def initialize(cas_opts)
     @cas_opts = DEFAULT_OPTIONS.merge(cas_opts)
-    get_tgt
+    begin
+      get_tgt
+    rescue RestClient::BadRequest => e
+      raise RestClient::Request::Unauthorized.new
+    end
   end
 
   def get(uri, options = {})
