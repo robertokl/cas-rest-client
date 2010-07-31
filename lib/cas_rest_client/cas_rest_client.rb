@@ -6,6 +6,7 @@ class CasRestClient
 
   def initialize(cas_opts)
     @cas_opts = DEFAULT_OPTIONS.merge(cas_opts)
+    get_tgt
   end
 
   def get(uri, options = {})
