@@ -16,9 +16,17 @@ class CasRestClient
   def get(uri, options = {})
     execute("get", uri, {}, options)
   end
+  
+  def delete(uri, options = {})
+    execute("delete", uri, {}, options)
+  end
 
   def post(uri, params = {}, options = {})
     execute("post", uri, params, options)
+  end
+  
+  def put(uri, params = {}, options = {})
+    execute("put", uri, params, options)
   end
 
   private

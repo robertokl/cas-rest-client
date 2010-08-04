@@ -25,12 +25,26 @@ describe CasRestClient do
       crc.instance_variable_set("@cookies", "blabla")
       crc.get("tst.app").should == "resource"
     end
+    
+    it "should delete the resource with cookies" do
+      crc = CasRestClient.new(options)
+      RestClient.should_receive(:send).with("delete", "tst.app", :cookies => "blabla").and_return("resource")
+      crc.instance_variable_set("@cookies", "blabla")
+      crc.delete("tst.app").should == "resource"
+    end
 
     it "should post a resource with cookies" do
       crc = CasRestClient.new(options)
       RestClient.should_receive(:send).with("post", "tst.app", {:opt => :opts}, :cookies => "blabla").and_return("resource")
       crc.instance_variable_set("@cookies", "blabla")
       crc.post("tst.app", {:opt => :opts}).should == "resource"
+    end
+    
+    it "should put a resource with cookies" do
+      crc = CasRestClient.new(options)
+      RestClient.should_receive(:send).with("put", "tst.app", {:opt => :opts}, :cookies => "blabla").and_return("resource")
+      crc.instance_variable_set("@cookies", "blabla")
+      crc.put("tst.app", {:opt => :opts}).should == "resource"
     end
 
     it "should get the resource with already retrieved tgt if cookie fails" do
