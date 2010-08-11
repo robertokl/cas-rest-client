@@ -62,3 +62,6 @@ If you want to prevent this behaviour, just set **:use_cookies** to false:
 
 ### Project info
 Written by [Antonio Marques](http://github.com/acmarques) and [Roberto Klein](http://github.com/robertokl). Contributions and feedback are welcomed.
+
+#### Contributions
+[Thiago Morello](http://github.com/morellon)
