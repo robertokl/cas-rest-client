@@ -1,11 +1,13 @@
 class CasRestClient
+  
   @cas_opts = nil
   @tgt = nil
   @cookies = nil
   DEFAULT_OPTIONS = {:use_cookies => true}
 
-  def initialize(cas_opts)
-    @cas_opts = DEFAULT_OPTIONS.merge(cas_opts)
+  def initialize(cas_opts = {})
+    @cas_opts = DEFAULT_OPTIONS.merge(get_cas_config).merge(cas_opts)
+    
     begin
       get_tgt
     rescue RestClient::BadRequest => e
@@ -76,4 +78,20 @@ class CasRestClient
     @tgt = RestClient.post(opts.delete(:uri), opts).headers[:location]
   end
   
+  def get_cas_config
+    begin
+      cas_config = YAML.load_file("config/cas_rest_client.yml")
+      cas_config = cas_config[Rails.env] if defined?(Rails) and Rails.env
+      
+      cas_config = cas_config.inject({}) do |options, (key, value)|
+        options[(key.to_sym rescue key) || key] = value
+        options
+      end
+    rescue Exception
+      cas_config = {}
+    end
+    cas_config
+  end
 end
+
+

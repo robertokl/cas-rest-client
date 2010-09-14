@@ -83,4 +83,64 @@ describe CasRestClient do
       lambda{CasRestClient.new(options)}.should raise_error(RestClient::Request::Unauthorized)
     end
   end
+  
+  describe "config file" do
+    it "should read its configuration from config/cas_rest_client.yml if it exists" do
+      config = {
+        "uri"=>"https://casuri.com/v1/tickets", 
+        "service"=>"http://someservice.com/orders", 
+        "username"=>"user", 
+        "domain"=>"some_domain", 
+        "use_cookies"=>false, 
+        "password"=>"some_password"
+      }
+      YAML.should_receive(:load_file).with("config/cas_rest_client.yml").and_return(config)
+      mock_header = mock()
+      mock_header.should_receive(:headers).and_return({:location => "http://some_location.com"})
+      RestClient.should_receive(:post).and_return(mock_header)
+      
+      client = CasRestClient.new
+      
+      client_config = client.instance_eval('@cas_opts')
+      client_config[:uri].should be_eql("https://casuri.com/v1/tickets")
+      client_config[:service].should be_eql("http://someservice.com/orders")
+      client_config[:username].should be_eql("user")
+      client_config[:domain].should be_eql("some_domain")
+      client_config[:use_cookies].should be_eql(false)
+      client_config[:password].should be_eql("some_password")
+    end
+    
+    it "should read its configuration from config/cas_rest_client.yml in a Rails app with different Rails envs" do
+      config = {"development" => 
+        {
+          "uri"=>"https://casuri.com/v1/tickets", 
+          "service"=>"http://someservice.com/orders", 
+          "username"=>"user", 
+          "domain"=>"some_domain", 
+          "use_cookies"=>false, 
+          "password"=>"some_password"
+        }
+      }
+      class Rails
+        def self.env
+          "development"
+        end
+      end
+      
+      YAML.should_receive(:load_file).with("config/cas_rest_client.yml").and_return(config)
+      mock_header = mock()
+      mock_header.should_receive(:headers).and_return({:location => "http://some_location.com"})
+      RestClient.should_receive(:post).and_return(mock_header)
+      
+      client = CasRestClient.new
+      
+      client_config = client.instance_eval('@cas_opts')
+      client_config[:uri].should be_eql("https://casuri.com/v1/tickets")
+      client_config[:service].should be_eql("http://someservice.com/orders")
+      client_config[:username].should be_eql("user")
+      client_config[:domain].should be_eql("some_domain")
+      client_config[:use_cookies].should be_eql(false)
+      client_config[:password].should be_eql("some_password")
+    end    
+  end
 end
