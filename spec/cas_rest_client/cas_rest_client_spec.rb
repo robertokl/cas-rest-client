@@ -110,6 +110,31 @@ describe CasRestClient do
       client_config[:password].should be_eql("some_password")
     end
     
+    it "should overwrite any parameter from configuration file if a new is specified in the constructor" do
+      config = {
+        "uri"=>"https://casuri.com/v1/tickets", 
+        "service"=>"http://someservice.com/orders", 
+        "username"=>"user", 
+        "domain"=>"some_domain", 
+        "use_cookies"=>false, 
+        "password"=>"some_password"
+      }
+      YAML.should_receive(:load_file).with("config/cas_rest_client.yml").and_return(config)
+      mock_header = mock()
+      mock_header.should_receive(:headers).and_return({:location => "http://some_location.com"})
+      RestClient.should_receive(:post).and_return(mock_header)
+      
+      client = CasRestClient.new :use_cookies => true, :uri => 'https://otheruri.com/v1/tickets'
+      
+      client_config = client.instance_eval('@cas_opts')
+      client_config[:uri].should be_eql('https://otheruri.com/v1/tickets')
+      client_config[:service].should be_eql("http://someservice.com/orders")
+      client_config[:username].should be_eql("user")
+      client_config[:domain].should be_eql("some_domain")
+      client_config[:use_cookies].should be_eql(true)
+      client_config[:password].should be_eql("some_password")
+    end  
+    
     it "should read its configuration from config/cas_rest_client.yml in a Rails app with different Rails envs" do
       config = {"development" => 
         {
@@ -141,6 +166,6 @@ describe CasRestClient do
       client_config[:domain].should be_eql("some_domain")
       client_config[:use_cookies].should be_eql(false)
       client_config[:password].should be_eql("some_password")
-    end    
+    end  
   end
 end

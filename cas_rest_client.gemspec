@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{cas_rest_client}
-  s.version = "1.2"
+  s.version = "1.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Antonio Marques, Roberto Klein"]
-  s.date = %q{2010-07-08}
+  s.date = %q{2010-09-15}
   s.email = ["acmarques@gmail.com", "robertokl@gmail.com"]
   s.files = ['lib/**/*.rb']
   s.homepage = %q{http://github.com/robertokl/cas-rest-client}
@@ -25,5 +25,6 @@ Gem::Specification.new do |s|
     end
   else
     s.add_dependency(%q<rest-client>, [">= 1.4.2"])
+    s.add_dependency(%q<yaml>)
   end
 end
