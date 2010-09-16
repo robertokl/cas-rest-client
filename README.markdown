@@ -76,7 +76,7 @@ And then:
 >CasRestClient.new.post 'http://service.using.cas', some_xml, headers
 
 
-If you want to override parameters, you just need to pass it when creating the object. The parameter read from **config/cas_rest_client.yml** will be ovwewritten. For example,
+If you want to override parameters, you just need to pass it when creating the object. The parameter read from **config/cas_rest_client.yml** will be overwritten. For example,
 
 >client = CasRestClient.new :use_cookies => true
 
