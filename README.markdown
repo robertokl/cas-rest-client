@@ -61,7 +61,7 @@ If you want to prevent this behaviour, just set **:use_cookies** to false:
 
 >client.post 'http://service.using.cas', some_xml, headers
 
-#### Configuration file
+### Configuration file
 You can place all your CAS auth configuration in a file **config/cas_rest_client.yml**. CasRestClient will look for this file to get its configuration. For example:
 
 >uri: https://some-cas-server.com/tickets  
