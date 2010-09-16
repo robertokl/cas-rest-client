@@ -61,6 +61,8 @@ If you want to prevent this behaviour, just set **:use_cookies** to false:
 
 >client.post 'http://service.using.cas', some_xml, headers
 
+
+
 ### Configuration file
 You can place all your CAS auth configuration in a file **config/cas_rest_client.yml**. CasRestClient will look for this file to get its configuration. For example:
 
@@ -72,6 +74,13 @@ You can place all your CAS auth configuration in a file **config/cas_rest_client
 
 And then:
 >CasRestClient.new.post 'http://service.using.cas', some_xml, headers
+
+
+If you want to override parameters, you just need to pass it when creating the object. The parameter read from **config/cas_rest_client.yml** will be ovwewritten. For example,
+
+>client = CasRestClient.new :use_cookies => true
+
+will use cookies.
 
 In a Rails app, you can even define parameters according to the current Rails.env:
 >development:  
@@ -88,11 +97,6 @@ In a Rails app, you can even define parameters according to the current Rails.en
 &nbsp;&nbsp;password: test_pass  
 &nbsp;&nbsp;use_cookies: true  
 
-If you want to override parameters, you just need to pass it when creating the object. The parameter read from **config/cas_rest_client.yml** will be ovwewritten. For example,
-
->client = CasRestClient.new :use_cookies => true
-
-will use cookies.
 
 
 ### Project info
