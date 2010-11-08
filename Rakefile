@@ -6,7 +6,7 @@ require 'spec/rake/spectask'
 
 GEM = "cas_rest_client"
 GEM_VERSION = "1.3"
-SUMMARY = "Rest client for services using CAS authentication."
+SUMMARY = "Rest client to interact with CASified services."
 AUTHOR = "Antonio Marques, Roberto Klein"
 EMAIL = ["acmarques@gmail.com", "robertokl@gmail.com"]
 HOMEPAGE = "http://github.com/robertokl/cas-rest-client"

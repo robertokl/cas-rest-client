@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/robertokl/cas-rest-client}
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.7}
-  s.summary = %q{Rest client for services using CAS authentication.}
+  s.summary = %q{Rest client to interact with CASified services.}
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
