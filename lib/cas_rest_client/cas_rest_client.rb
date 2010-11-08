@@ -33,7 +33,7 @@ class CasRestClient
 
   private
   def execute(method, uri, params, options)
-    if @cas_opts[:use_cookies]
+    if @cas_opts[:use_cookies] and !@cookies.nil? and !@cookies.empty?
       begin
         execute_with_cookie(method, uri, params, options)
       rescue RestClient::Request::Unauthorized => e
