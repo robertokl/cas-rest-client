@@ -18,6 +18,17 @@ describe CasRestClient do
       crc.should_not_receive(:execute_with_cookie)
       crc.get("xpto")
     end
+    
+    it "should not try to access a resource with cookies if @cookies is not set" do
+      crc = CasRestClient.new(options)
+      RestClient.should_not_receive(:send).with("get", "tst.app", :cookies => nil)
+      crc.instance_variable_set("@tgt", "tgt.url")
+      RestClient.should_receive(:post).with("tgt.url", :service => "tst.app").and_return("ticket1")
+      response = mock()
+      response.should_receive(:cookies).and_return({:cookie1 => "value"})
+      RestClient.should_receive(:send).with("get", "tst.app?ticket=ticket1", {}).and_return(response)
+      crc.get("tst.app").should == response
+    end
 
     it "should get the resource with cookies" do
       crc = CasRestClient.new(options)
@@ -49,7 +60,8 @@ describe CasRestClient do
 
     it "should get the resource with already retrieved tgt if cookie fails" do
       crc = CasRestClient.new(options)
-      RestClient.should_receive(:send).with("get", "tst.app", :cookies => nil).and_raise(RestClient::Request::Unauthorized.new("pan"))
+      crc.instance_variable_set('@cookies', {'session' => 'lala'})
+      RestClient.should_receive(:send).with("get", "tst.app", :cookies => {'session' => 'lala'}).and_raise(RestClient::Request::Unauthorized.new("pan"))
       crc.instance_variable_set("@tgt", "tgt.url")
       RestClient.should_receive(:post).with("tgt.url", :service => "tst.app").and_return("ticket1")
       response = mock()
@@ -61,7 +73,6 @@ describe CasRestClient do
     it "should go after a tgt if existing tgt expires" do
       crc = CasRestClient.new(options.merge(:service => "custom.service"))
       crc.instance_variable_set("@tgt", "tgt.url.old")
-      RestClient.should_receive(:send).with("get", "tst.app", :cookies => nil).and_raise(RestClient::Request::Unauthorized.new("pan"))
       RestClient.should_receive(:post).with("tgt.url.old", :service => "custom.service").and_raise(RestClient::ResourceNotFound.new("pan"))
       response = mock()
       response.should_receive(:headers).and_return({:location => "tgt.url.new"})
