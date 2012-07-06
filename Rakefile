@@ -19,9 +19,9 @@ spec = Gem::Specification.new do |s|
   s.summary = SUMMARY
   s.require_paths = ['lib']
   s.files = FileList['lib/**/*.rb'].to_a
-  
+
   s.add_dependency("rest-client", [">= 1.4.2"])
-  
+
   s.author = AUTHOR
   s.email = EMAIL
   s.homepage = HOMEPAGE
@@ -40,7 +40,7 @@ desc "Install the gem locally"
 task :install => [:package] do
   sh %{sudo gem install pkg/#{GEM}-#{GEM_VERSION}}
 end
- 
+
 desc "Create a gemspec file"
 task :make_spec do
   File.open("#{GEM}.gemspec", "w") do |file|
