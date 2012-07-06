@@ -58,6 +58,16 @@ describe CasRestClient do
       crc.put("tst.app", {:opt => :opts}).should == "resource"
     end
 
+    it "should send ticket in header if it ticket_header was configured" do
+      crc = CasRestClient.new(options.merge(:cookie => false, :ticket_header => "auth-ticket"))
+      crc.instance_variable_set("@tgt", "tgt.url")
+      RestClient.should_receive(:post).with("tgt.url", :service => "tst.app").and_return("ticket1")
+      response = mock()
+      response.stub(:cookies)
+      RestClient.should_receive(:send).with("post", "tst.app", { :name => "test"}, {"auth-ticket" => "ticket1"}).and_return(response)
+      crc.post("tst.app", {:name => "test"}).should == response
+    end
+
     it "should get the resource with already retrieved tgt if cookie fails" do
       crc = CasRestClient.new(options)
       crc.instance_variable_set('@cookies', {'session' => 'lala'})

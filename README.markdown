@@ -22,7 +22,7 @@ When the CasRestClient instance is created it'll automatically create a Ticket-G
 You can pass any custom parameter by adding it to the initialization hash. Doing so, CasRestClient will use these parameters to create the Ticket-Granting Ticket on CAS.
 
 For example, to pass a 'domain' custom parameter just add:
-  
+
     params = {:uri => 'https://some-cas-server.com/tickets', :username => 'user', password => 'pass', :domain => "myDomain"}
     client = CasRestClient.new params
 
@@ -34,7 +34,7 @@ For example, to pass a 'domain' custom parameter just add:
 Since CasRestClient uses [RestClient](http://github.com/archiloque/rest-client) to make HTTP requests, you can set any parameters that RestClient accepts while interacting with the CASified application.
 
 For example, to pass additional HTTP headers:
-  
+
     client = CasRestClient.new :uri => 'https://some-cas-server.com/tickets', :username => 'user', password => 'pass'
 
     headers = {:content_type => 'text/xml', :user_agent => 'my_app', 'Accept-Language' => 'en_US'}  
@@ -44,12 +44,20 @@ For example, to pass additional HTTP headers:
 ### Additional options
 #### :service => 'some_string' (default to CASified app URI)
 By default, CasRestClient uses the URI of the CASified app as the *service* parameter to create service tickets. To change this just provide the **:service** param: 
-  
+
     client = CasRestClient.new :uri => 'https://some-cas-server.com/tickets', :service => "http://my_svc.com"
 
     client.post 'http://service.using.cas', some_xml, headers
 
 With this example configuration, CasRestClient will always create service tickets for the **http://my_svc.com** service.
+
+
+#### :ticket_header => "header_name"
+By default, the ticket will be sent as a parameter in query string. If you have to send the ticket in the request header you might configure the header name that you want it uses.
+
+    client = CasRestClient.new :uri => 'https://some-cas-server.com/tickets', :ticket_header => "header_name"
+
+    client.post 'http://service.using.cas', some_xml, headers
 
 
 #### use_cookie => Boolean (default true)
@@ -91,7 +99,7 @@ In a Rails app, you can even define parameters according to the current Rails.en
       username: some_user  
       password: pass  
       use_cookies: false  
- 
+
     test:  
       uri: https://some-test-cas-server.com/tickets  
       domain: test_domain  
