@@ -1,5 +1,5 @@
 class CasRestClient
-  
+
   @cas_opts = nil
   @tgt = nil
   @cookies = nil
@@ -7,7 +7,7 @@ class CasRestClient
 
   def initialize(cas_opts = {})
     @cas_opts = DEFAULT_OPTIONS.merge(get_cas_config).merge(cas_opts)
-    
+
     begin
       get_tgt
     rescue RestClient::BadRequest => e
@@ -18,7 +18,7 @@ class CasRestClient
   def get(uri, options = {})
     execute("get", uri, {}, options)
   end
-  
+
   def delete(uri, options = {})
     execute("delete", uri, {}, options)
   end
@@ -26,7 +26,7 @@ class CasRestClient
   def post(uri, params = {}, options = {})
     execute("post", uri, params, options)
   end
-  
+
   def put(uri, params = {}, options = {})
     execute("put", uri, params, options)
   end
@@ -59,10 +59,22 @@ class CasRestClient
       get_tgt
       ticket = create_ticket(@tgt, :service => @cas_opts[:service] || uri)
     end
-    response = RestClient.send(method, "#{uri}#{uri.include?("?") ? "&" : "?"}ticket=#{ticket}", options) if params.empty?
-    response = RestClient.send(method, "#{uri}#{uri.include?("?") ? "&" : "?"}ticket=#{ticket}", params, options) unless params.empty?
+
+    response = execute_request(method, uri, ticket, params, options)
+
     @cookies = response.cookies
     response
+  end
+
+  def execute_request(method, uri, ticket, params, options)
+    if @cas_opts[:ticket_header]
+      options[@cas_opts[:ticket_header]] = ticket
+    else
+      uri = "#{uri}#{uri.include?("?") ? "&" : "?"}ticket=#{ticket}"
+    end
+
+    return RestClient.send(method, uri, options) if params.empty?
+    RestClient.send(method, uri, params, options)
   end
 
   def create_ticket(uri, params)
@@ -77,12 +89,12 @@ class CasRestClient
     opts.delete(:use_cookies)
     @tgt = RestClient.post(opts.delete(:uri), opts).headers[:location]
   end
-  
+
   def get_cas_config
     begin
       cas_config = YAML.load_file("config/cas_rest_client.yml")
       cas_config = cas_config[Rails.env] if defined?(Rails) and Rails.env
-      
+
       cas_config = cas_config.inject({}) do |options, (key, value)|
         options[(key.to_sym rescue key) || key] = value
         options
