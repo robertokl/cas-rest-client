@@ -45,7 +45,7 @@ class CasRestClient
   end
 
   def execute_with_cookie(method, uri, params, options)
-    return RestClient.send(method, uri, {:cookies => @cookies}.merge(options)) if params.empty?
+    return RestClient.send(method, uri, {:cookies => @cookies}.merge(options)) if RestClient.method(method).arity > -3
     RestClient.send(method, uri, params, {:cookies => @cookies}.merge(options))
   end
 
@@ -73,7 +73,7 @@ class CasRestClient
       uri = "#{uri}#{uri.include?("?") ? "&" : "?"}ticket=#{ticket}"
     end
 
-    return RestClient.send(method, uri, options) if params.empty?
+    return RestClient.send(method, uri, options) if RestClient.method(method).arity > -3
     RestClient.send(method, uri, params, options)
   end
 
