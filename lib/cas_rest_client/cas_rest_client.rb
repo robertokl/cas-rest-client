@@ -45,8 +45,7 @@ class CasRestClient
   end
 
   def execute_with_cookie(method, uri, params, options)
-    return RestClient.send(method, uri, {:cookies => @cookies}.merge(options)) if params.empty?
-    RestClient.send(method, uri, params, {:cookies => @cookies}.merge(options))
+    restclient_send(method, uri, params, {:cookies => @cookies}.merge(options))
   end
 
   def execute_with_tgt(method, uri, params, options)
@@ -72,9 +71,7 @@ class CasRestClient
     else
       uri = "#{uri}#{uri.include?("?") ? "&" : "?"}ticket=#{ticket}"
     end
-
-    return RestClient.send(method, uri, options) if params.empty?
-    RestClient.send(method, uri, params, options)
+    restclient_send(method, uri, params, options)
   end
 
   def create_ticket(uri, params)
@@ -104,6 +101,10 @@ class CasRestClient
     end
     cas_config
   end
+
+  def restclient_send(method, uri, params, options) 
+    return RestClient.send(method, uri, options) unless method =~ /^post|patch|put$/i
+    RestClient.send(method, uri, params, options)
+  end
+
 end
-
-
