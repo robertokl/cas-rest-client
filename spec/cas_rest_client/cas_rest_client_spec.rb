@@ -9,6 +9,7 @@ describe CasRestClient do
 
   describe 'Lifecycle' do 
     let(:crc) { CasRestClient.new(options) }
+    let(:cookie) { "the-cas-cookie" }
     before :each do
       RestClient.should_receive(:post).and_return(mock(:headers => {:location => "http://tgt_uri.com"}))    
     end
@@ -48,8 +49,39 @@ describe CasRestClient do
         crc.get("tst.app").should == response
       end
 
+      context "when a POST is redirected" do
+        before {
+          crc.instance_variable_set("@tgt", "tgt.url")
+          RestClient.should_receive(:post).with("tgt.url", :service => "tst.app").and_return("ticket1")
+        }
+        let(:ticket_response) {
+          mock(:"ticket-response", :cookies => cookie).tap do |mock|
+            class << mock
+              # Stubbing these doesn't work because of the way RestClient exceptions are implemented
+              def net_http_res; nil; end
+              def code; 302; end
+            end
+          end
+        }
+        context "and the POST doesn't return a cookie" do
+          let(:cookie) { nil }
+          it "raises the RestClient::NotFound" do
+            RestClient.should_receive(:send).with("post", "tst.app?ticket=ticket1", {}).and_raise RestClient::Found.new(ticket_response, 302)
+            lambda { crc.post("tst.app") }.should raise_error(RestClient::Found)
+          end
+        end
+        context "and the POST returns a cookie" do
+          it "should retry the POST using the cookie" do
+            cookie_response = mock(:"cookie-response", :cookies => cookie)
+  
+            RestClient.should_receive(:send).with("post", "tst.app?ticket=ticket1", {}).and_raise RestClient::Found.new(ticket_response, 302)
+            RestClient.should_receive(:send).with("post", "tst.app", :cookies => cookie).and_return(cookie_response)
+            crc.post("tst.app").should == cookie_response
+          end
+        end
+      end
+
       context "with @cookies" do
-        let(:cookie) { "blabla" }
         before { 
           crc.instance_variable_set("@cookies", cookie)
         }
@@ -65,22 +97,22 @@ describe CasRestClient do
         end
         
         it "should get the resource with cookies" do
-          RestClient.should_receive(:send).with("get", "tst.app", :cookies => "blabla").and_return("resource")
+          RestClient.should_receive(:send).with("get", "tst.app", :cookies => cookie).and_return("resource")
           crc.get("tst.app").should == "resource"
         end
         
         it "should delete the resource with cookies" do
-          RestClient.should_receive(:send).with("delete", "tst.app", :cookies => "blabla").and_return("resource")
+          RestClient.should_receive(:send).with("delete", "tst.app", :cookies => cookie).and_return("resource")
           crc.delete("tst.app").should == "resource"
         end
     
         it "should post a resource with cookies" do
-          RestClient.should_receive(:send).with("post", "tst.app", {:opt => :opts}, :cookies => "blabla").and_return("resource")
+          RestClient.should_receive(:send).with("post", "tst.app", {:opt => :opts}, :cookies => cookie).and_return("resource")
           crc.post("tst.app", {:opt => :opts}).should == "resource"
         end
     
         it "should put a resource with cookies" do
-          RestClient.should_receive(:send).with("put", "tst.app", {:opt => :opts}, :cookies => "blabla").and_return("resource")
+          RestClient.should_receive(:send).with("put", "tst.app", {:opt => :opts}, :cookies => cookie).and_return("resource")
           crc.put("tst.app", {:opt => :opts}).should == "resource"
         end
       end

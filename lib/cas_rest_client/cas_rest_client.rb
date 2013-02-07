@@ -67,14 +67,23 @@ class CasRestClient
   end
 
   def execute_request(method, uri, ticket, params, options)
+    original_uri = uri
     if @cas_opts[:ticket_header]
       options[@cas_opts[:ticket_header]] = ticket
     else
       uri = "#{uri}#{uri.include?("?") ? "&" : "?"}ticket=#{ticket}"
     end
 
-    return RestClient.send(method, uri, options) if params.empty?
-    RestClient.send(method, uri, params, options)
+    begin
+      return RestClient.send(method, uri, options) if params.empty?
+      RestClient.send(method, uri, params, options)
+    rescue RestClient::Found => e
+      if method == 'post' && ( @cookies = e.response.cookies )
+        execute_with_cookie method, original_uri, params, options
+      else
+        raise
+      end
+    end
   end
 
   def create_ticket(uri, params)
