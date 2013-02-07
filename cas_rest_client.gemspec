@@ -26,4 +26,6 @@ Gem::Specification.new do |s|
   else
     s.add_dependency(%q<rest-client>, [">= 1.4.2"])
   end
+  
+  s.add_development_dependency 'rspec'
 end
